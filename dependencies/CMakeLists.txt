@@ -159,9 +159,24 @@ int main() {}
   add_library(yyjson STATIC "${yyjson_SOURCE_DIR}/src/yyjson.c")
   target_include_directories(yyjson SYSTEM PUBLIC "${yyjson_SOURCE_DIR}/src")
   target_compile_definitions(yyjson INTERFACE SIMDJSON_COMPETITION_YYJSON)
+  
+  CPMAddPackage(
+      NAME lite3
+      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lite3
+  )
+  add_custom_target(lite3_build
+      COMMAND make -j
+      WORKING_DIRECTORY ${lite3_SOURCE_DIR}
+      COMMENT "Building lite3 with make"
+  )
+  add_library(lite3 INTERFACE)
+  add_dependencies(lite3 lite3_build)
+  target_link_libraries(lite3 INTERFACE ${lite3_SOURCE_DIR}/build/liblite3.a)
+  target_include_directories(lite3 INTERFACE ${lite3_SOURCE_DIR}/include)
+  target_compile_definitions(lite3 INTERFACE SIMDJSON_COMPETITION_LITE3)
 
   add_library(competition-core INTERFACE)
-  target_link_libraries(competition-core INTERFACE nlohmann_json rapidjson sajson cjson jsmn yyjson)
+  target_link_libraries(competition-core INTERFACE nlohmann_json rapidjson sajson cjson jsmn yyjson lite3)
 
   if(TARGET boostjson)
      target_compile_definitions(boostjson INTERFACE HAS_BOOST_JSON)

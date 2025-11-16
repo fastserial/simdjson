@@ -2,6 +2,11 @@
 
 SIMDJSON_PUSH_DISABLE_ALL_WARNINGS
 
+#ifdef SIMDJSON_COMPETITION_LITE3
+#include "lite3.h"
+#include "lite3_context_api.h"
+#endif
+
 #ifdef SIMDJSON_COMPETITION_YYJSON
 #include "yyjson.h"
 #endif
@@ -28,6 +33,7 @@ SIMDJSON_PUSH_DISABLE_ALL_WARNINGS
 // This has to be last, for reasons I don't yet understand
 #include <benchmark/benchmark.h>
 
+
 SIMDJSON_POP_DISABLE_WARNINGS
 #include "json2msgpack/simdjson_ondemand.h"
 #include "json2msgpack/simdjson_dom.h"
@@ -35,12 +41,15 @@ SIMDJSON_POP_DISABLE_WARNINGS
 #include "json2msgpack/rapidjson.h"
 #if SIMDJSON_COMPETITION_ONDEMAND_SAJSON
 #include "json2msgpack/sajson.h"
+#include "json2msgpack/sajson.h"
 #endif // SIMDJSON_COMPETITION_ONDEMAND_SAJSON
 #include "json2msgpack/nlohmann_json.h"
 #include "json2msgpack/boostjson.h"
 
 #include "partial_tweets/simdjson_ondemand.h"
 #include "partial_tweets/simdjson_dom.h"
+#include "partial_tweets/lite3.h"
+#include "partial_tweets/lite3_context_api.h"
 #include "partial_tweets/yyjson.h"
 #if SIMDJSON_COMPETITION_ONDEMAND_SAJSON
 #include "partial_tweets/sajson.h"
@@ -60,6 +69,8 @@ SIMDJSON_POP_DISABLE_WARNINGS
 #include "distinct_user_id/simdjson_ondemand_json_pointer.h"
 #include "distinct_user_id/simdjson_dom.h"
 #include "distinct_user_id/simdjson_dom_json_pointer.h"
+#include "distinct_user_id/lite3.h"
+#include "distinct_user_id/lite3_context_api.h"
 #include "distinct_user_id/yyjson.h"
 #if SIMDJSON_COMPETITION_ONDEMAND_SAJSON
 #include "distinct_user_id/sajson.h"
@@ -76,6 +87,8 @@ SIMDJSON_POP_DISABLE_WARNINGS
 
 #include "find_tweet/simdjson_ondemand.h"
 #include "find_tweet/simdjson_dom.h"
+#include "find_tweet/lite3.h"
+#include "find_tweet/lite3_context_api.h"
 #include "find_tweet/yyjson.h"
 #if SIMDJSON_COMPETITION_ONDEMAND_SAJSON
 #include "find_tweet/sajson.h"
@@ -92,6 +105,8 @@ SIMDJSON_POP_DISABLE_WARNINGS
 
 #include "top_tweet/simdjson_ondemand.h"
 #include "top_tweet/simdjson_dom.h"
+#include "top_tweet/lite3.h"
+#include "top_tweet/lite3_context_api.h"
 #include "top_tweet/yyjson.h"
 #if SIMDJSON_COMPETITION_ONDEMAND_SAJSON
 #include "top_tweet/sajson.h"
