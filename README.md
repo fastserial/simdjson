@@ -1,3 +1,68 @@
+# Simdjson Twitter API Data Benchmark
+This repository has been forked from [the original](https://github.com/simdjson/simdjson) to add the Lite³ format to the benchmarks.
+
+![](lite3_benchmark_simdjson_twitter_api_data.png)
+
+| Format               | top_tweet        | partial_tweets   | find_tweet       | distinct_user_id |
+| -------------------- | ---------------- | ---------------- | ---------------- | ---------------- |
+| yyjson               | 205426 ns        | -                | 203147 ns        | 207233 ns        |
+| simdjson On-Demand   | 91184 ns         | 91090 ns         | 53937 ns         | 85036 ns         |
+| simdjson DOM         | 147264 ns        | 153397 ns        | 143567 ns        | 150541 ns        |
+| RapidJSON            | 1081987 ns       | 1091551 ns       | 1075215 ns       | 1085541 ns       |
+| Lite³ Context API    | 2285 ns          | 17820 ns         | 456 ns           | 11869 ns         |
+| Lite³ Buffer API     | 2221 ns          | 17659 ns         | 448 ns           | 11699 ns         |
+
+Benchmark data:
+- [simdjson_output.txt](simdjson_output.txt)
+- [simdjson.csv](simdjson.csv)
+
+To replicate this benchmark, run:
+```bash
+git clone https://github.com/fastserial/simdjson.git
+cd simdjson/
+mkdir build
+cd build
+cmake -D SIMDJSON_DEVELOPER_MODE=ON ..
+cmake --build . --target bench_ondemand --config Release
+```
+A single benchmark run can now be performed like so:
+```bash
+./benchmark/bench_ondemand
+```
+However to produce more consistent results, CPU frequency scaling should first be disabled to minimize variance:
+```bash
+apt update
+apt install linux-cpupower
+cpupower frequency-set -g performance
+cpupower frequency-info
+```
+You should see:
+        
+        The governor "performance" may decide which speed to use
+
+The OS can also introduce variance by inconsistent scheduling of threads across NUMA-domains.
+To prevent this, the process and memory should be pinned.
+Also, not one but multiple runs will increase the consistency of the results.
+
+This command will perform 10 benchmark runs and write the results to `output.txt`:
+```bash
+lscpu >> output.txt && \
+numactl -H >> output.txt && \
+numactl --cpunodebind=0 --membind=0 ./benchmark/bench_ondemand >> output.txt && \
+numactl --cpunodebind=0 --membind=0 ./benchmark/bench_ondemand >> output.txt && \
+numactl --cpunodebind=0 --membind=0 ./benchmark/bench_ondemand >> output.txt && \
+numactl --cpunodebind=0 --membind=0 ./benchmark/bench_ondemand >> output.txt && \
+numactl --cpunodebind=0 --membind=0 ./benchmark/bench_ondemand >> output.txt && \
+numactl --cpunodebind=0 --membind=0 ./benchmark/bench_ondemand >> output.txt && \
+numactl --cpunodebind=0 --membind=0 ./benchmark/bench_ondemand >> output.txt && \
+numactl --cpunodebind=0 --membind=0 ./benchmark/bench_ondemand >> output.txt && \
+numactl --cpunodebind=0 --membind=0 ./benchmark/bench_ondemand >> output.txt && \
+numactl --cpunodebind=0 --membind=0 ./benchmark/bench_ondemand >> output.txt
+```
+
+
+# Original README:
+
 [![][license img]][license] [![][licensemit img]][licensemit]
 
 
